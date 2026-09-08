@@ -12,11 +12,11 @@ To implement and analyze classical symmetric ciphers (Caesar and Vigenère) for 
 
    [View Caesar Cipher Code](Codes/Caesar_cipher.py)
 
-   ![Caesar Cipher Output 1](outputs/CAESAR_1.png)
+   ![Caesar Cipher Output 1](outputs/CAESER_1.png)
 
 2. Encrypt the plaintext using a fixed shift with modulo 26, while preserving spaces and punctuation. Decrypt the ciphertext using the reverse shift and compare it with the original plaintext.
 
-   ![Caesar Cipher Output 2](outputs/CAESAR_2.png)
+   ![Caesar Cipher Output 2](outputs/CAESER_2.png)
 
 ### Vigenère Cipher
 
