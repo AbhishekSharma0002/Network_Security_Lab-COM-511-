@@ -196,8 +196,8 @@ This extended the experiment beyond secure email communication and demonstrated 
 
 The `Outputs` folder contains the following exported public keys:
 
-- [`Tanish Sharma publickey.asc`](Outputs/Tanish%20Sharma%20publickey.asc) — Public key generated for the sender's email identity.
-- [`Abhishek Sharma publickey.asc`](Outputs/Abhishek%20Sharma%20publickey.asc) — Communication partner's public key exchanged and imported during the experiment.
+- [`Abhishek Sharma publickey.asc`](Outputs/Abhishek%20Sharma%20publickey.asc) Public key generated for the sender's email identity.
+- [`Tanish Sharma publickey.asc`](Outputs/Tanish%20Sharma%20publickey.asc) — Communication partner's public key exchanged and imported during the experiment.
 
 These files can be imported into compatible OpenPGP applications for public-key encryption and digital-signature verification.
 
