@@ -41,6 +41,8 @@ Results:
 
 The original file generated a 64-character SHA-256 hash and returned “Match” before modification. After changing one character, the verification returned “Mismatch”, with 59 out of 64 (92.19%) hexadecimal hash characters being different.
 
+![SHA-256 Hash Output](outputs/sha256.jpg)
+
 Detailed Outputs:
 
 The outputs and screenshots can be reviewed by scanning the QR code below.
