@@ -52,6 +52,7 @@ A tampering test was added by modifying the received authentication tag. The sys
 * A response with an old timestamp was rejected as an expired response.
 * Changing the HMAC tag caused the authentication process to fail.
 * The authenticity and integrity of the response can be verified using the QR code below.
+![Replayoutputs](outputs/replay.png)
 
 ### Discussion:
 
