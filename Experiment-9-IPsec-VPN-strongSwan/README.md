@@ -1,133 +1,96 @@
-### Experiment 9: Configuration and Analysis of IPsec VPN in Tunnel Mode
+Experiment 9: Configure and Analyze IPsec VPN in Tunnel Mode
+1. Aim / Objective
+To configure a two-host IKEv2 tunnel, test protected traffic, and analyze the outer packets.
 
-### 1\. Aim / Objective
+2. Requirements
+Two Kali Linux virtual machines (Gateway A and Gateway B)
+strongSwan IPsec implementation
+Terminal access with administrative privileges
+Network connectivity between both gateways
+Wireshark or packet inspection utilities
+3. Theory
+IPsec (Internet Protocol Security): A suite of protocols that provides encryption, authentication, and integrity protection for IP communication.
 
-To establish an IKEv2 tunnel between two hosts, test secure communication, and examine the encapsulated packets.
+Tunnel Mode: An IPsec mode in which the complete original IP packet is protected and encapsulated inside a new outer IP packet.
 
-### 2\. Requirements
+IKEv2 (Internet Key Exchange Version 2): A protocol used to authenticate VPN peers, negotiate security parameters, and establish encryption keys.
 
-* Two Kali Linux virtual machines (Gateway A and Gateway B).
+ESP (Encapsulating Security Payload): An IPsec protocol that provides encryption, integrity, and anti-replay protection.
 
-* strongSwan IPsec software.
+Pre-Shared Key (PSK): A common secret used by both VPN gateways for peer authentication.
 
-* Terminal with administrator access.
+strongSwan: An open-source implementation of IPsec used to configure and manage secure VPN connections.
 
-* Network connectivity between both gateways.
+4. Procedure
+Step 1: Configure IP Addresses of Both Gateways
+Two Kali Linux virtual machines are configured as Gateway A and Gateway B. Their outer IP addresses are assigned as 192.168.229.128 and 192.168.229.129, respectively. The inner tunnel addresses 10.10.1.1/32 and 10.20.1.1/32 are assigned to the respective gateways using the loopback interface.
 
-* Wireshark or other packet analysis tools.
+IP Addressing of Both Gateways
 
-### 3\. Theory
-
-* IPsec: A set of protocols that secures IP communication through encryption, authentication, and data integrity.
-
-* Tunnel Mode: Protects the entire original IP packet by encapsulating it inside a new IP packet.
-
-* IKEv2: Establishes secure communication by authenticating peers and exchanging encryption keys.
-
-* ESP: Provides encryption, integrity, and replay protection for transmitted data.
-
-* Pre-Shared Key (PSK): A shared secret used to authenticate both VPN gateways.
-
-* strongSwan: An open-source tool used to configure and manage IPsec VPN connections.
-
-### 4\. Procedure
-
-Step 1: Configure IP Addresses
-
-Two Kali Linux virtual machines are set up as Gateway A and Gateway B. Their outer IP addresses are `192.168.229.128` and `192.168.229.129`. The inner tunnel addresses `10.10.1.1/32` and `10.20.1.1/32` are assigned through loopback interfaces.
-
-IP Address Configuration
-
-Step 2: Test Network Connectivity
-
-The connection between both gateways is tested using the ping command to ensure that they can communicate over the outer network.
+Step 2: Verify Outer Network Connectivity
+The outer network connectivity between both gateways is verified using ping requests. This ensures that the gateways can communicate before establishing the IPsec tunnel.
 
 Outer Network Connectivity
 
-Step 3: Check strongSwan Configuration
+Step 3: Verify Loaded strongSwan Configuration
+The strongSwan configuration is loaded and checked using the swanctl utility. The configured IKEv2 connection, peer identities, tunnel selectors, and authentication settings are verified on both gateways.
 
-The loaded strongSwan settings are examined using the `swanctl` utility. Connection details, peer identities, authentication methods, and tunnel settings are verified.
+Loaded strongSwan Configuration
 
-strongSwan Configuration Verification
+Step 4: Verify Established IKE SA and CHILD SA
+The IPsec connection is initiated from Gateway A. The IKE Security Association (IKE SA) and CHILD Security Association (CHILD SA) are checked using:
 
-Step 4: Check IKE SA and CHILD SA
-
-The VPN connection is started from Gateway A. The following command is used to check the established security associations:
-
-```bash
 sudo swanctl --list-sas
-```
 
-The output confirms the VPN connection and negotiated security settings.
+The output confirms the established VPN connection and negotiated security parameters.
 
-Established Security Associations
+Established IKE SA and CHILD SA
 
-Step 5: Examine IPsec XFRM States
+Step 5: Verify IPsec XFRM States
+The installed IPsec security states are inspected using:
 
-The installed IPsec states are viewed using:
-
-```bash
 sudo ip xfrm state
-```
 
-This displays the SPI, encryption algorithm, and other security parameters.
+The output displays the Security Parameter Index (SPI), encryption algorithm, and other parameters associated with the IPsec tunnel.
 
 IPsec XFRM States
 
-Step 6: Examine IPsec Policies
+Step 6: Verify IPsec XFRM Policies
+The installed IPsec policies are inspected using:
 
-The configured IPsec policies are checked using:
-
-```bash
 sudo ip xfrm policy
-```
 
-These policies determine which network traffic must pass through IPsec protection.
+These policies specify which traffic is protected by the IPsec tunnel and the security processing applied to matching packets.
 
 IPsec XFRM Policies
 
-Step 7: Test Protected Communication
+Step 7: Verify Protected Traffic Through the IPsec Tunnel
+Protected communication is tested by sending inner-network ping requests using:
 
-Secure communication between the inner tunnel addresses is tested with:
-
-```bash
 ping -I 10.10.1.1 10.20.1.1
-```
 
-Successful replies confirm that packets are travelling through the VPN tunnel.
+The successful replies demonstrate communication between the inner tunnel addresses through the IPsec VPN.
 
-Protected IPsec Communication
+Protected Traffic Through IPsec Tunnel
 
-Step 8: Check IPsec Traffic Counters
-
-The IPsec traffic counters are examined to monitor transmitted packets and bytes. Increasing counter values indicate successful processing of tunnel traffic.
+Step 8: Verify IPsec Traffic Counters
+The IPsec Security Association traffic counters are inspected to verify the number of packets and bytes transferred through the tunnel in both directions. Increasing counters confirm that traffic is being processed by IPsec.
 
 IPsec Traffic Counters
 
-### 5\. Improvement
+5. Improvement
+A pre-shared key authentication test was performed by temporarily configuring an incorrect key on one gateway. The authentication attempt failed, and the tunnel was not established. After restoring the correct shared key, the IPsec tunnel was successfully re-established, demonstrating the role of PSK-based peer authentication.
 
-An incorrect pre-shared key was temporarily configured on one gateway to test authentication. The connection failed because the keys did not match. After restoring the correct key, the VPN tunnel was established successfully. This verified PSK-based authentication.
+6. Files Included
+Commands.sh: Contains the commands used during the experiment along with their descriptions.
+Outputs/ss1.png – ss8.png: Screenshots documenting IP addressing, connectivity, configuration verification, tunnel establishment, IPsec states and policies, protected traffic, and traffic counters.
+7. Result
+The IKEv2 Security Association and IPsec CHILD Security Association were established between both gateways.
+The negotiated ESP encryption algorithm was AES-GCM-16-256.
+The inner-network ping returned 4 out of 4 replies with 0% packet loss.
+IPsec traffic counters recorded 4 packets and 336 bytes transferred in each direction.
+An incorrect pre-shared key was rejected during authentication, while restoring the correct key allowed the tunnel to establish again.
+Detailed outputs and screenshots can be viewed by scanning the QR code provided in the lab manual.
 
-### 6\. Files Included
-
-* Commands.sh: Contains the commands used in the experiment with brief explanations.
-
-* Outputs/ss1.png – ss8.png: Includes screenshots of IP configuration, connectivity, VPN setup, security associations, XFRM states and policies, protected communication, and traffic counters.
-
-### 7\. Result
-
-* IKEv2 and IPsec CHILD Security Associations were successfully established.
-
-* The negotiated ESP encryption algorithm was AES-GCM-16-256.
-
-* Inner-network ping received 4 out of 4 replies with 0% packet loss.
-
-* IPsec counters showed 4 packets and 336 bytes transferred in both directions.
-
-* Incorrect PSK authentication was rejected, while the correct key successfully re-established the tunnel.
-
-Detailed results are available in the screenshots through the QR code provided in the lab manual.
-
-### 8\. Conclusion
-
-The experiment successfully demonstrated a site-to-site IPsec VPN using IKEv2 and ESP in tunnel mode. Secure communication was achieved through encryption and pre-shared key authentication between the two gateways.
+8. Conclusion
+The site-to-site IPsec VPN demonstrated secure communication between two gateways using IKEv2, ESP encryption, tunnel mode, and pre-shared key authentication.
